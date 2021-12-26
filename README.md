@@ -2,7 +2,7 @@
 
 ## Description
 
-#TODO: describe **dff-TEMPLATE-skill** 
+**dff_finance_skill** 
 ## Quickstart
 
 ```bash
@@ -16,6 +16,14 @@ Run tests
 ```bash
 python run_test.py
 ```
+## External APIs
+### DEEPL API
+This repository uses DEEPL API (Free 500'000 characters a month) -> https://deepl.com
+To avoid writing my key in source code, I set it in an environment variable
+called "DEEPL_AUTH_KEY" with the API KEY value. This is a precondition, that the chat works properly.
+
+
+
 ## Resources
 #TODO: resources
 * Execution time: ????

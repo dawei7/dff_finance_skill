@@ -3,7 +3,7 @@
 import time
 from typing import Optional, Union
 
-from scenario.main import actor
+from scenario.main import actor, LANG
 from df_engine.core import Actor, Context
 from annotators.main import annotate
 

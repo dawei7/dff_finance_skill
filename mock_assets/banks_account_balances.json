@@ -1,0 +1,10 @@
+{
+    "banks":
+    [
+    {"name":"UBS","amount":10000},
+    {"name":"Credit Suisse","amount":8000},
+    {"name":"Raiffeisen","amount":6000},
+    {"name":"Zürcher Kantonalbank","amount":4000},
+    {"name":"Postfinance","amount":2000}
+    ]
+}
