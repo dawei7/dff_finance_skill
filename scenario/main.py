@@ -1,40 +1,41 @@
 from typing import Dict, List, Tuple, Any
 import re
 
-global LANG
-LANG = "EN" # Default is EN - English, but it can be overwritten to DE - German
-
 from df_engine.core import Actor, Context
 from df_engine.core.keywords import TRANSITIONS, RESPONSE, PROCESSING
 import df_engine.conditions as cnd
 import df_engine.labels as lbl
-from .response import * # Import all custom reponse functions
 
+import scenario.condition as loc_cnd # Import all custom condition functions
+import scenario.response as loc_rsp # Import all custom reponse functions
+
+ctx = Context()
+ctx.misc["language"] = "EN"
 
 plot = {
     "global":{
         "start":{
         RESPONSE:"",
         TRANSITIONS: {
-                "node1":cnd.true() # Always true, starting point
+                lbl.forward():loc_rsp.param_setter # Always true, starting point
             },
         },
         "node1":{
-        RESPONSE:bot_introduction,
+        RESPONSE:loc_rsp.bot_introduction,
         TRANSITIONS: {
                 ("global", "node1"): cnd.regexp(r"start", re.IGNORECASE),
-                lbl.repeat():check_language, # Always repeat response, when language change trigger words are used
-                ("check_balance","node_1"): transition_check_balance_flow,
+                lbl.repeat():loc_rsp.check_language, # Always repeat response, when language change trigger words are used
+                ("check_balance","node_1"): loc_rsp.transition_check_balance_flow,
                 lbl.forward():cnd.true() # If nothing matches go into next node and loop, until something matches or back to start
 
             },
         },
         "node1_loop":{
-        RESPONSE:bot_introduction_loop,
+        RESPONSE:loc_rsp.bot_introduction_loop,
         TRANSITIONS: {
                 ("global", "node1"): cnd.regexp(r"start", re.IGNORECASE),
-                lbl.repeat():check_language, # Always repeat response, when language change trigger words are used
-                ("check_balance","node_1"): transition_check_balance_flow,
+                lbl.repeat():loc_rsp.check_language, # Always repeat response, when language change trigger words are used
+                ("check_balance","node_1"): loc_rsp.transition_check_balance_flow,
                 lbl.repeat():cnd.true() # If nothing matches loop, until something matches
             },
         },
@@ -64,19 +65,19 @@ plot = {
     },
     "check_balance":{
         "node_1":{
-            RESPONSE:check_balance_node1_response,
+            RESPONSE:loc_rsp.check_balance_node1_response,
             TRANSITIONS:{
                 ("global", "node1"): cnd.regexp(r"start", re.IGNORECASE),
-                lbl.repeat():check_language, # Always repeat response, when language change trigger words are used
+                lbl.repeat():loc_rsp.check_language, # Always repeat response, when language change trigger words are used
 
                 lbl.forward():cnd.true() # If nothing matches go into next node and loop, until something matches or back to start
             }
         },
         "node1_loop":{
-        RESPONSE:bot_introduction_loop,
+        RESPONSE:loc_rsp.bot_introduction_loop,
         TRANSITIONS: {
                 ("global", "node1"): cnd.regexp(r"start", re.IGNORECASE),
-                lbl.repeat():check_language, # Always repeat response, when language change trigger words are used
+                lbl.repeat():loc_rsp.check_language, # Always repeat response, when language change trigger words are used
                 lbl.repeat():cnd.true() # If nothing matches loop, until something matches
             }
         }

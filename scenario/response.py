@@ -12,25 +12,31 @@ import requests
 
 from annotators.main import annotate
 
-from scenario.main import LANG
+# 0. Param Setter
+def param_setter(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
+
+    ctx.misc["language"] = "EN"
+
+
+    return True # Always true, starting point
+
 
 # 1. ----------GLOBAL FLOW----------
-def check_language(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    global LANG
+def check_language(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     request = ctx.last_request.lower()
 
     if re.search(r"\b(german)\b|\b(deutsch)\b|\b(de)\b", request):
-        LANG = "DE"
+        #ctx.misc["language"] = "DE"
         return True
     elif re.search(r"\b(english)\b|\b(englisch)\b|\b(en)\b", request):
-        LANG = "EN"
+        #ctx.misc["language"] = "EN"
         return True
     else:
         return False
 
-
 def bot_introduction(ctx: Context, actor: Actor) -> Any:
-    global LANG
+    language = ctx.misc.get("language")
+
     response = """
 Hello I'm your personal financial bi-lingual chat-bot.
 I speak 'English and 'German'. Whenever you want to change the language
@@ -47,32 +53,32 @@ I have the following financial skills:
 Off-topic skill:
     - Information about the creator of the bot.
 """
-    if LANG == "EN":
+    if language == "EN" or language==None:
         return response
-    elif LANG == "DE":
+    elif language == "DE":
         translator = deepl.Translator(os.getenv("DEEPL_AUTH_KEY"))
         return translator.translate_text(response, target_lang="DE")
 
 def bot_introduction_loop(ctx: Context, actor: Actor) -> Any:
-    global LANG
+    language = ctx.misc.get("language")
     response = "\n"
-    if LANG == "EN":
+    if language == "EN":
         response += "I'm afraid I didn't understand you, please try again.\n"
         response += bot_introduction(ctx, actor)
-    elif LANG == "DE":
+    elif language == "DE":
         response += "Ich habe Sie leider nicht verstanden, bitte versuchen Sie es nochmals.\n"
         response += bot_introduction(ctx, actor)
     return response
 
 
 def transition_check_balance_flow(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    global LANG
+    language = ctx.misc.get("language")
     request = ""
 
-    if LANG=="DE":
+    if language =="DE":
         translator = deepl.Translator(os.getenv("DEEPL_AUTH_KEY"))
         request = str(translator.translate_text(ctx.last_request, target_lang="EN-US")).lower()
-    elif LANG == "EN":
+    elif language == "EN":
         request = ctx.last_request.lower()
 
     return re.search(r"\b(check)\b|\b(checking)\b|\b(balance)\b", request)!=None # True if found, else None if False
@@ -81,7 +87,7 @@ def transition_check_balance_flow(ctx: Context, actor: Actor, *args, **kwargs) -
 # 2. ----------CHECK BALANCE FLOW----------
 
 def check_balance_node1_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
-    global LANG
+    language = ctx.misc.get("language")
 
     # Opening JSON file
     f = open("mock_assets/banks_account_balances.json")
@@ -95,8 +101,8 @@ def check_balance_node1_response(ctx: Context, actor: Actor, *args, **kwargs) ->
 
     response = data
 
-    if LANG=="DE":
+    if language == "DE":
         translator = deepl.Translator(os.getenv("DEEPL_AUTH_KEY"))
         return translator.translate_text(response, target_lang="EN-US")
-    elif LANG == "EN":
+    elif language == "EN":
         return response
