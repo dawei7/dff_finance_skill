@@ -2,7 +2,7 @@ from typing import Dict, List, Tuple, Any
 import re
 
 from df_engine.core import Actor, Context
-from df_engine.core.keywords import TRANSITIONS, RESPONSE, PROCESSING
+from df_engine.core.keywords import TRANSITIONS, RESPONSE, PROCESSING, MISC
 import df_engine.conditions as cnd
 import df_engine.labels as lbl
 
@@ -15,86 +15,84 @@ ctx.misc["language"] = "EN"
 plot = {
     "global":{
         "start":{
-        RESPONSE:"",
-        TRANSITIONS: {
-                lbl.forward():loc_rsp.param_setter # Always true, starting point
-            },
-        },
-        "node1":{
         RESPONSE:loc_rsp.bot_introduction,
         TRANSITIONS: {
-                ("global", "node1"): cnd.regexp(r"start", re.IGNORECASE),
-                lbl.repeat():loc_rsp.check_language, # Always repeat response, when language change trigger words are used
-                ("check_balance","node_1"): loc_rsp.transition_check_balance_flow,
-                lbl.forward():cnd.true() # If nothing matches go into next node and loop, until something matches or back to start
-
+                lbl.forward():cnd.true() # Automatic forward to first step
             },
         },
-        "node1_loop":{
-        RESPONSE:loc_rsp.bot_introduction_loop,
+        "bot_introduction":{
+        RESPONSE:loc_rsp.bot_introduction,
         TRANSITIONS: {
-                ("global", "node1"): cnd.regexp(r"start", re.IGNORECASE),
-                lbl.repeat():loc_rsp.check_language, # Always repeat response, when language change trigger words are used
-                ("check_balance","node_1"): loc_rsp.transition_check_balance_flow,
-                lbl.repeat():cnd.true() # If nothing matches loop, until something matches
+                ("check_accounts","check_banks"): loc_cnd.check_banks,
+                lbl.repeat():cnd.true() # If nothing matches go loop until something matches, additionally a special loop message will be displayed
             },
         },
-
-
-
-
         "fallback": {  # We get to this node if an error occurred while the agent was running
-            RESPONSE: "Ooops",
+            RESPONSE: "Ooops - something went wrong, either you type 'start' to go back to start node or \n\
+            you press 'pevious' to go back to the previous point.' Anyway, I am very sorry.",
             TRANSITIONS: {
-                ("global", "start"): cnd.regexp(r"hi|hello", re.IGNORECASE),
+                ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
                 lbl.previous(): cnd.regexp(r"previous", re.IGNORECASE),
                 lbl.repeat(): cnd.true(), # If no match, repeast
             },
         }     
     },
-
-    "shares_flow":{
-
-
-
-    },
-    "leasing_flow":{
-
-
-
-    },
-    "check_balance":{
-        "node_1":{
-            RESPONSE:loc_rsp.check_balance_node1_response,
+    "check_accounts":{
+        "check_banks":{
+            RESPONSE:loc_rsp.check_banks,
             TRANSITIONS:{
-                ("global", "node1"): cnd.regexp(r"start", re.IGNORECASE),
-                lbl.repeat():loc_rsp.check_language, # Always repeat response, when language change trigger words are used
+                ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
 
-                lbl.forward():cnd.true() # If nothing matches go into next node and loop, until something matches or back to start
+                lbl.repeat():cnd.true() # If nothing matches go loop until something matches, additionally a special loop message will be displayed
             }
         },
-        "node1_loop":{
-        RESPONSE:loc_rsp.bot_introduction_loop,
+        "check_balance":{
+        RESPONSE:loc_rsp.check_banks,
         TRANSITIONS: {
-                ("global", "node1"): cnd.regexp(r"start", re.IGNORECASE),
-                lbl.repeat():loc_rsp.check_language, # Always repeat response, when language change trigger words are used
+                ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
+
                 lbl.repeat():cnd.true() # If nothing matches loop, until something matches
             }
-        }
+        },
+        "transfer_money":{
+        RESPONSE:loc_rsp.check_banks,
+        TRANSITIONS: {
+                ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
+
+                lbl.repeat():cnd.true() # If nothing matches loop, until something matches
+            }
+        },
+        "deposit_money":{
+        RESPONSE:loc_rsp.check_banks,
+        TRANSITIONS: {
+                ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
+
+                lbl.repeat():cnd.true() # If nothing matches loop, until something matches
+            }
+        },
+        "withdraw_money":{
+        RESPONSE:loc_rsp.check_banks,
+        TRANSITIONS: {
+                ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
+
+                lbl.repeat():cnd.true() # If nothing matches loop, until something matches
+            }
+        },
     },
-    "deposit_money_flow":{
+    "get_shares":{
 
-
-    },
-    "transfer_money_flow":{
 
 
     },
-    "chitchat_creator_flow":{
+    "chat_financial_topics":{
+
+
+    },
+
+    "chat_creator_flow":{
 
 
     }
-
 
 }
 
