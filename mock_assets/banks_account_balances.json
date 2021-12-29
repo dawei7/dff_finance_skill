@@ -1,10 +1,26 @@
 {
-    "banks":
-    [
-    {"name":"UBS","amount":10000},
-    {"name":"Credit Suisse","amount":8000},
-    {"name":"Raiffeisen","amount":6000},
-    {"name":"Zürcher Kantonalbank","amount":4000},
-    {"name":"Postfinance","amount":2000}
-    ]
+    "UBS":{
+        "amount":10000,
+        "interest":0.02
+    },
+    "Credit Suisse":
+    {
+        "amount":8000,
+        "interest":0.015
+    },
+    "Raiffeisen":
+    {
+        "amount":6000,
+        "interest":0.01
+    },
+    "Zuercher Kantonalbank":
+    {
+        "amount":4000,
+        "interest":0.005
+    },
+    "Postfinance":
+    {
+        "amount":2000,
+        "interest":0
+    }
 }

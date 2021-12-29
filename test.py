@@ -1,9 +1,12 @@
-import deepl
-import os
+import json
 
-translator = deepl.Translator(os.getenv("DEEPL_AUTH_KEY"))
+f = open("mock_assets/banks_account_balances.json")
+banks = json.load(f,encoding='utf-8')
+f.close()
 
-result = translator.translate_text("Hello, world!", target_lang="DE")
-print(result)
+my_banks = "\n"
 
+for bank in banks.keys():
+    my_banks+=f"{bank}\n"
 
+print(my_banks)
