@@ -7,7 +7,7 @@ import json
 from df_engine.core import Actor, Context
 
 from scenario.response_util import loop_checker
-import scenario.helper_check_balance as helper_check_balance
+import scenario.helper_check_accounts as helper_check_accounts
 
 
 # translator
@@ -47,14 +47,18 @@ Off-topic skill:
     elif language == "DE":
         return str(translator.translate_text(response, target_lang="DE"))
 
-# 2. ----------CHECK BALANCE FLOW----------
+# 2. ----------CHECK ACCOUNTS FLOW----------
 
+# 2.1
 def check_banks(ctx: Context, actor: Actor) -> Any:
     language = ctx.misc.get("language")
 
     response = loop_checker(ctx)
     response += """
-You have balances on the following bank accounts:
+You have balances on the following bank accounts:"""
+    response += helper_check_accounts.check_available_banks()
+    response += """
+Instructions:
 - By typing the Bank's name, you can access your balance and interest rate.
 - By typing two Bank's name, you can transfer money from one bank to another
 - You can deposit money to a bank
@@ -63,6 +67,22 @@ You have balances on the following bank accounts:
 """
 
     if language == "DE":
-        return str(translator.translate_text(response, target_lang="DE")) + helper_check_balance.check_available_banks()
+        return str(translator.translate_text(response, target_lang="DE"))
     elif language == "EN":
-        return response + helper_check_balance.check_available_banks()
+        return response
+
+# 2.2
+def check_balance(ctx: Context, actor: Actor) -> Any:
+    pass
+
+# 2.3
+def tranfer_money(ctx: Context, actor: Actor) -> Any:
+    pass
+
+# 2.4
+def deposit_money(ctx: Context, actor: Actor) -> Any:
+    pass
+
+#2.5
+def withdraw_money(ctx: Context, actor: Actor) -> Any:
+    pass

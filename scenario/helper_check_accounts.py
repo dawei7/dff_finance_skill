@@ -8,6 +8,6 @@ f.close()
 def check_available_banks():
     my_banks = "\n"
     for bank in banks.keys():
-        my_banks+=f"{bank}\n"
+        my_banks+=f"- {bank}\n"
 
     return my_banks

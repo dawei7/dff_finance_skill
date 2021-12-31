@@ -42,6 +42,8 @@ plot = {
             RESPONSE:loc_rsp.check_banks,
             TRANSITIONS:{
                 ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
+                ("check_accounts","check_balance"): loc_cnd.check_balance,
+
 
                 lbl.repeat():cnd.true() # If nothing matches go loop until something matches, additionally a special loop message will be displayed
             }
