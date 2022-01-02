@@ -92,3 +92,116 @@ def transfer_money_confirm(ctx:Context):
         my_response += "\n Press any key to go back to the bank overview or press 'start to go back to the start'"
 
     return my_response
+
+
+def deposit_money(ctx:Context):
+
+    my_banks = ["".join(x) for x in re.findall(r"\b(UBS)\b|\b(Credit Suisse)\b|\b(Raiffeisen)\b|\b(Zuercher Kantonalbank)\b|\b(Postfinance)\b", clean_request(ctx, no_translation=True, lower=False))]
+    my_amount = ["".join(x) for x in re.findall(r"[1-9]\d*",clean_request(ctx, no_translation=True, lower=False))]
+
+    try:
+        ctx.misc["deposit_bank"] = my_banks[0]
+        ctx.misc["deposit_amount"] = int(my_amount[0])
+    except:
+        ctx.misc["deposit_bank"] = None
+        ctx.misc["deposit_amount"] = None
+
+    my_amount = ctx.misc.get("deposit_amount")
+
+    try:
+        my_response = f"\nAre you sure, that you want to deposit CHF {my_amount} to {my_banks[0]}?"
+        my_response += "\nTo confirm the transaction please type 'yes' otherwise 'no'. To go back to the banks overview type 'back'."
+        my_response += "\n-------------------------------------------------------------------------------------------"
+    except:
+        my_response ="\nSomething went wrong"
+
+    return my_response
+
+
+def deposit_money_confirm(ctx:Context):
+
+    if re.search(r"\b(yes)\b",clean_request(ctx)) != None:
+        try:
+            my_response = ""
+            deposit_bank = ctx.misc.get("deposit_bank")
+            my_amount = ctx.misc.get("deposit_amount")
+
+            banks[deposit_bank]["Amount"] += my_amount
+
+            my_response += f"\nSuccess! You deposited CHF {my_amount} to {deposit_bank}.\n"
+            my_response += "\nNew balances:\n\n"
+            for bank in [deposit_bank]:
+                my_response += f"{bank}:\n"
+                for k, v in banks[bank].items():
+                    my_response += f"{k}: {v:,}\n"
+                my_response += "\n Press any key to go back to the bank overview or press 'start to go back to the start'"
+
+            my_response += "\n-------------------------------------------------------------------------------------------"
+    
+        except:
+            my_response ="\nSomething went wrong."
+
+    else:
+        my_response = "\n Alright. You didn't confirm."
+        my_response += "\n Press any key to go back to the bank overview or press 'start to go back to the start'"
+
+    return my_response
+
+
+
+def withdraw_money(ctx:Context):
+
+    my_banks = ["".join(x) for x in re.findall(r"\b(UBS)\b|\b(Credit Suisse)\b|\b(Raiffeisen)\b|\b(Zuercher Kantonalbank)\b|\b(Postfinance)\b", clean_request(ctx, no_translation=True, lower=False))]
+    my_amount = ["".join(x) for x in re.findall(r"[1-9]\d*",clean_request(ctx, no_translation=True, lower=False))]
+
+    try:
+        ctx.misc["withdraw_bank"] = my_banks[0]
+        ctx.misc["withdraw_amount"] = int(my_amount[0])
+    except:
+        ctx.misc["withdraw_bank"] = None
+        ctx.misc["withdraw_amount"] = None
+
+    my_amount = ctx.misc.get("withdraw_amount")
+
+    try:
+        my_response = f"\nAre you sure, that you want to withdraw CHF {my_amount} from {my_banks[0]}?"
+        my_response += "\nTo confirm the transaction please type 'yes' otherwise 'no'. To go back to the banks overview type 'back'."
+        my_response += "\n-------------------------------------------------------------------------------------------"
+    except:
+        my_response ="\nSomething went wrong"
+
+    return my_response
+
+def withdraw_money_confirm(ctx:Context):
+
+    if re.search(r"\b(yes)\b",clean_request(ctx)) != None:
+        try:
+            my_response = ""
+            withdraw_bank = ctx.misc.get("withdraw_bank")
+            my_amount = ctx.misc.get("withdraw_amount")
+
+
+            if banks[withdraw_bank]["Amount"]-my_amount>=0:
+                banks[withdraw_bank]["Amount"] -= my_amount
+
+                my_response += f"\nSuccess! You withdrawed CHF {my_amount} from {withdraw_bank}.\n"
+                my_response += "\nNew balances:\n\n"
+                for bank in [withdraw_bank]:
+                    my_response += f"{bank}:\n"
+                    for k, v in banks[bank].items():
+                        my_response += f"{k}: {v:,}\n"
+                    my_response += "\n Press any key to go back to the bank overview or press 'start to go back to the start'"
+
+            else:
+                my_response+= "\nVery sorry! The amount of the withdraw bank is too low. Please choose another amount"
+
+            my_response += "\n-------------------------------------------------------------------------------------------"
+    
+        except:
+            my_response ="\nSomething went wrong."
+
+    else:
+        my_response = "\n Alright. You didn't confirm."
+        my_response += "\n Press any key to go back to the bank overview or press 'start to go back to the start'"
+
+    return my_response

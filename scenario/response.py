@@ -99,13 +99,27 @@ def transfer_money_confirm(ctx: Context, actor: Actor) -> Any:
 # 2.4
 def deposit_money(ctx: Context, actor: Actor) -> Any:
     
-    response = ""
+    response = helper_check_accounts.deposit_money(ctx)
 
     return clean_response(ctx, response)
+
+
+def deposit_money_confirm(ctx: Context, actor: Actor) -> Any:
+    
+    response = helper_check_accounts.deposit_money_confirm(ctx)
+
+    return clean_response(ctx, response)
+
 
 #2.5
 def withdraw_money(ctx: Context, actor: Actor) -> Any:
     
-    response = ""
+    response = helper_check_accounts.withdraw_money(ctx)
+
+    return clean_response(ctx, response)
+
+def withdraw_money_confirm(ctx: Context, actor: Actor) -> Any:
+    
+    response = helper_check_accounts.withdraw_money_confirm(ctx)
 
     return clean_response(ctx, response)

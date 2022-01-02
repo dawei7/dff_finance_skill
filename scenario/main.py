@@ -74,7 +74,6 @@ plot = {
         RESPONSE:loc_rsp.transfer_money_confirm,
         TRANSITIONS: {
                 ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
-                ("check_accounts", "check_banks"): cnd.regexp(r"back", re.IGNORECASE),
                 ("check_accounts", "check_banks"): cnd.true() # In any case go back to start of check accounts
             }
         },
@@ -82,24 +81,30 @@ plot = {
         RESPONSE:loc_rsp.deposit_money,
         TRANSITIONS: {
                 ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
-                ("check_accounts","check_balances"): loc_cnd.check_balances,
-                ("check_accounts","transfer_money"): loc_cnd.tranfer_money,
-                ("check_accounts","deposit_money"): loc_cnd.deposit_money,
-                ("check_accounts","withdraw_money"): loc_cnd.withdraw_money,
-                ("check_accounts","check_banks"): loc_cnd.check_banks,
-                lbl.repeat():cnd.true() # If nothing matches go loop until something matches, additionally a special loop message will be displayed
+                ("check_accounts", "check_banks"): cnd.regexp(r"back", re.IGNORECASE),
+                ("check_accounts", "deposit_money_confirm"): cnd.true(), # In any case forward to get confirmation or rejection message
+            }
+        },
+        "deposit_money_confirm":{
+        RESPONSE:loc_rsp.deposit_money_confirm,
+        TRANSITIONS: {
+                ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
+                ("check_accounts", "check_banks"): cnd.true() # In any case go back to start of check accounts
             }
         },
         "withdraw_money":{
         RESPONSE:loc_rsp.withdraw_money,
         TRANSITIONS: {
                 ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
-                ("check_accounts","check_balances"): loc_cnd.check_balances,
-                ("check_accounts","transfer_money"): loc_cnd.tranfer_money,
-                ("check_accounts","deposit_money"): loc_cnd.deposit_money,
-                ("check_accounts","withdraw_money"): loc_cnd.withdraw_money,
-                ("check_accounts","check_banks"): loc_cnd.check_banks,
-                lbl.repeat():cnd.true() # If nothing matches go loop until something matches, additionally a special loop message will be displayed
+                ("check_accounts", "check_banks"): cnd.regexp(r"back", re.IGNORECASE),
+                ("check_accounts", "withdraw_money_confirm"): cnd.true(), # In any case forward to get confirmation or rejection message
+            }
+        },
+        "withdraw_money_confirm":{
+        RESPONSE:loc_rsp.withdraw_money_confirm,
+        TRANSITIONS: {
+                ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
+                ("check_accounts", "check_banks"): cnd.true(), # In any case forward to get confirmation or rejection message
             }
         },
     },

@@ -50,8 +50,26 @@ def tranfer_money(ctx: Context, actor: Actor) -> bool:
 
 # 2.4
 def deposit_money(ctx: Context, actor: Actor) -> Any:
+    
+    request = clean_request(ctx,no_translation=True,lower=False)
+    
+    #check and at least one bank
+    if re.search(r"\b(deposit)\b",request) != None and re.search(r"[1-9]\d*",request) != None:
+        banks = ["".join(x) for x in re.findall(r"\b(UBS)\b|\b(Credit Suisse)\b|\b(Raiffeisen)\b|\b(Zuercher Kantonalbank)\b|\b(Postfinance)\b", request)]
+        if len(banks) == 1:
+            return True
+
     return False
+
 
 #2.5
 def withdraw_money(ctx: Context, actor: Actor) -> Any:
+    request = clean_request(ctx,no_translation=True,lower=False)
+    
+    #check and at least one bank
+    if re.search(r"\b(withdraw)\b",request) != None and re.search(r"[1-9]\d*",request) != None:
+        banks = ["".join(x) for x in re.findall(r"\b(UBS)\b|\b(Credit Suisse)\b|\b(Raiffeisen)\b|\b(Zuercher Kantonalbank)\b|\b(Postfinance)\b", request)]
+        if len(banks) == 1:
+            return True
+
     return False
