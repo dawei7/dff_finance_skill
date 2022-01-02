@@ -8,26 +8,31 @@ from df_engine.core import Actor, Context
 
 from scenario.response_util import loop_checker
 import scenario.helper_check_accounts as helper_check_accounts
+from .condition_util import clean_request
 
 
 # translator
 translator = deepl.Translator(os.getenv("DEEPL_AUTH_KEY"))
 
 
-
 # 0. ----------GENERAL----------
+def clean_response(ctx: Context, response: str,loopchecker=True)-> Any:
+    language = ctx.misc.get("language")
 
+    response_clean = loop_checker(ctx,loopchecker=loopchecker)
+    response_clean += response
 
+    if language =="DE":
+        return str(translator.translate_text(response_clean, target_lang="DE"))
+    elif language =="EN":
+        return response_clean
 
 
 # 1. ----------GLOBAL FLOW----------
 
 def bot_introduction(ctx: Context, actor: Actor) -> Any:
-    language = ctx.misc.get("language")
 
-    response = loop_checker(ctx)
-
-    response += """
+    response = """
 Hello I'm your personal financial bi-lingual chat-bot.
 I speak 'English and 'German'. Whenever you want to change the language
 type the keyword 'german' or 'english' to switch the language.
@@ -42,47 +47,65 @@ Off-topic skill:
     - Information about the creator of the bot. (ML/DL)
 --------------------------------------------------------------------------------------------
 """
-    if language == "EN" or language==None:
-        return response
-    elif language == "DE":
-        return str(translator.translate_text(response, target_lang="DE"))
+    return clean_response(ctx, response)
 
 # 2. ----------CHECK ACCOUNTS FLOW----------
 
 # 2.1
 def check_banks(ctx: Context, actor: Actor) -> Any:
-    language = ctx.misc.get("language")
 
-    response = loop_checker(ctx)
-    response += """
-You have balances on the following bank accounts:"""
+    response = "You have accounts on the following banks:\n"
     response += helper_check_accounts.check_available_banks()
     response += """
 Instructions:
-- By typing the Bank's name, you can access your balance and interest rate.
-- By typing two Bank's name, you can transfer money from one bank to another
-- You can deposit money to a bank
-- You can wihdraw money from a bank
+- By typing 'show' and one or more banks' name, you can access your banks' account details. If you type like "show all", all banks get listed.
+- By typing 'transfer' two banks' name, you can transfer money from one bank to another
+- By typing 'deposit' deposit money to a specified bank
+- By typing 'withdraw' You can wihdraw money from a sceficied bank
+-------------------------------------------------------------------------------------------
+"""
+    return clean_response(ctx, response)
+
+# 2.2
+def check_balances(ctx: Context, actor: Actor) -> Any:
+    
+    response = helper_check_accounts.check_balances(ctx)
+    response += """Further possibilities:
+- By typing 'back', you can go back to your banks' overview.
+- By typing 'show' and one or more banks' name, you can access your banks' account details. If you type like "show all", all banks get listed.
+- By typing 'transfer', two banks name and anb amount, you can transfer money from one bank to another.
+- By typing 'deposit', a bank's name and an amount, you can deposit money to the specified bank.
+- By typing 'withdraw', a bank's name and an amount, you can wihdraw money from a sceficied bank.
 -------------------------------------------------------------------------------------------
 """
 
-    if language == "DE":
-        return str(translator.translate_text(response, target_lang="DE"))
-    elif language == "EN":
-        return response
 
-# 2.2
-def check_balance(ctx: Context, actor: Actor) -> Any:
-    pass
+    return clean_response(ctx, response,loopchecker=False)
 
 # 2.3
-def tranfer_money(ctx: Context, actor: Actor) -> Any:
-    pass
+def transfer_money(ctx: Context, actor: Actor) -> Any:
+    
+    response = helper_check_accounts.tranfer_money(ctx)
+
+    return clean_response(ctx, response)
+
+def transfer_money_confirm(ctx: Context, actor: Actor) -> Any:
+    
+    response = helper_check_accounts.transfer_money_confirm(ctx)
+
+    return clean_response(ctx, response)
+
 
 # 2.4
 def deposit_money(ctx: Context, actor: Actor) -> Any:
-    pass
+    
+    response = ""
+
+    return clean_response(ctx, response)
 
 #2.5
 def withdraw_money(ctx: Context, actor: Actor) -> Any:
-    pass
+    
+    response = ""
+
+    return clean_response(ctx, response)

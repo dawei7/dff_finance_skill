@@ -19,10 +19,11 @@ def turn_handler(
 
     # Add in current context a next request of user
     ctx.add_request(in_request)
-    ctx = annotate(ctx)
+    ctx = annotate(ctx,actor,scope="basic") #Changed from standard template, as scope="basic"
 
     # pass the context into actor and it returns updated context with actor response
     ctx = actor(ctx)
+
     # get last actor response from the context
     out_response = ctx.last_response
     # the next condition branching needs for testing
