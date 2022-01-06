@@ -8,6 +8,7 @@ from df_engine.core import Actor, Context
 
 from scenario.response_util import loop_checker
 import scenario.helper_check_accounts as helper_check_accounts
+import scenario.helper_shares as helper_shares
 from .condition_util import clean_request
 
 
@@ -40,11 +41,8 @@ You can go back to this bot introduction anywhere in the chat workflow by typing
 
 I have the following financial skills:
     - Check your balance, transfer money, deposit/withdraw money (REGEX/ Local save)
-    - Showing current share prices (REGEX/ yfinance API)
-    - Chatting about financial topics (HuggingFace)
-
-Off-topic skill:
-    - Information about the creator of the bot. (ML/DL)
+    - Showing current share prices (REGEX/ yfinance API/ Plotly)
+    - Chatting about financial topics QA (HuggingFace)
 --------------------------------------------------------------------------------------------
 """
     return clean_response(ctx, response)
@@ -123,3 +121,16 @@ def withdraw_money_confirm(ctx: Context, actor: Actor) -> Any:
     response = helper_check_accounts.withdraw_money_confirm(ctx)
 
     return clean_response(ctx, response)
+
+# 3.1
+def share_info(ctx: Context, actor: Actor) -> Any:
+    
+    response = helper_shares.shares_info(ctx)
+
+    return clean_response(ctx, response)
+
+def get_ticker(ctx: Context, actor: Actor) -> Any:
+    
+    response = helper_shares.get_ticker(ctx)
+
+    return clean_response(ctx, response,loopchecker=False)

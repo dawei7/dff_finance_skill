@@ -8,7 +8,6 @@ msft = yf.Ticker("MSFT")
 
 df = msft.history(period="max")
 
-
-fig = px.line(df, x='Date', y="Close")
+fig = px.line(df, x=df.index, y="Close")
 fig.show()
 
