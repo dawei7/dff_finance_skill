@@ -9,8 +9,6 @@ import df_engine.labels as lbl
 import scenario.condition as loc_cnd # Import all custom condition functions
 import scenario.response as loc_rsp # Import all custom reponse functions
 
-ctx = Context()
-ctx.misc["language"] = "EN"
 
 plot = {
     "global":{
@@ -54,6 +52,7 @@ plot = {
         RESPONSE:loc_rsp.check_balances,
         TRANSITIONS: {
                 ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
+                ("check_accounts", "check_banks"): cnd.regexp(r"back", re.IGNORECASE),
                 ("check_accounts","check_balances"): loc_cnd.check_balances,
                 ("check_accounts","transfer_money"): loc_cnd.tranfer_money,
                 ("check_accounts","deposit_money"): loc_cnd.deposit_money,
