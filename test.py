@@ -1,12 +1,6 @@
-import json
+import yfinance as yf
 
-f = open("mock_assets/banks_account_balances.json")
-banks = json.load(f,encoding='utf-8')
-f.close()
+msft = yf.Ticker("MSFT")
 
-my_banks = "\n"
-
-for bank in banks.keys():
-    my_banks+=f"{bank}\n"
-
-print(my_banks)
+# get stock info
+print(msft.info)
