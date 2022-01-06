@@ -15,6 +15,8 @@ plot = {
         "start":{
         RESPONSE:loc_rsp.bot_introduction,
         TRANSITIONS: {
+                ("check_accounts","check_banks"): loc_cnd.check_banks,
+                ("get_shares","shares_overview"): cnd.regexp(r"share", re.IGNORECASE),
                 lbl.forward():cnd.true() # Automatic forward to first step
             },
         },
@@ -22,6 +24,7 @@ plot = {
         RESPONSE:loc_rsp.bot_introduction,
         TRANSITIONS: {
                 ("check_accounts","check_banks"): loc_cnd.check_banks,
+                ("get_shares","shares_overview"): cnd.regexp(r"share", re.IGNORECASE),
                 lbl.repeat():cnd.true() # If nothing matches go loop until something matches, additionally a special loop message will be displayed
             },
         },
@@ -108,6 +111,20 @@ plot = {
         },
     },
     "get_shares":{
+        "shares_overview":{
+        RESPONSE:loc_rsp.share_info,
+        TRANSITIONS: {
+                lbl.forward(): cnd.true(), # If no match, repeast
+            }
+        },
+        "get_ticker":{
+        RESPONSE:loc_rsp.get_ticker,
+        TRANSITIONS: {
+                ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
+                ("get_shares", "shares_overview"): cnd.regexp(r"back", re.IGNORECASE),
+                lbl.repeat(): cnd.true(), # If no match, repeast
+            }
+        }
 
 
 
