@@ -8,7 +8,7 @@ from df_engine.core import Actor, Context
 
 from scenario.response_util import loop_checker
 import scenario.helper_check_accounts as helper_check_accounts
-import scenario.helper_shares as helper_shares
+import scenario.helper_ticker as helper_shares
 from .condition_util import clean_request
 
 
@@ -123,14 +123,21 @@ def withdraw_money_confirm(ctx: Context, actor: Actor) -> Any:
     return clean_response(ctx, response)
 
 # 3.1
-def share_info(ctx: Context, actor: Actor) -> Any:
+def overview_ticker(ctx: Context, actor: Actor) -> Any:
     
-    response = helper_shares.shares_info(ctx)
+    response = helper_shares.overview_ticker(ctx)
 
     return clean_response(ctx, response)
 
-def get_ticker(ctx: Context, actor: Actor) -> Any:
+def plot_ticker(ctx: Context, actor: Actor) -> Any:
     
-    response = helper_shares.get_ticker(ctx)
+    response = helper_shares.plot_ticker(ctx)
+
+    return clean_response(ctx, response,loopchecker=False)
+
+
+def QA_ticker(ctx: Context, actor: Actor) -> Any:
+    
+    response = helper_shares.QA_ticker(ctx)
 
     return clean_response(ctx, response,loopchecker=False)

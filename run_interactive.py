@@ -21,7 +21,7 @@ def turn_handler(
     ctx.add_request(in_request)
     ctx = annotate(ctx,actor,scope="basic") #Changed from standard template, as scope="basic"
 
-    # pass the context into actor and it returns updated context with actor response
+    # pass the context into actor and it returns updated conheytext with actor response
     ctx = actor(ctx)
 
     # get last actor response from the context

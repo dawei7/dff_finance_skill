@@ -16,7 +16,7 @@ plot = {
         RESPONSE:loc_rsp.bot_introduction,
         TRANSITIONS: {
                 ("check_accounts","check_banks"): loc_cnd.check_banks,
-                ("get_shares","shares_overview"): cnd.regexp(r"share", re.IGNORECASE),
+                ("get_ticker","overview_ticker"): cnd.regexp(r"share", re.IGNORECASE),
                 lbl.forward():cnd.true() # Automatic forward to first step
             },
         },
@@ -24,7 +24,7 @@ plot = {
         RESPONSE:loc_rsp.bot_introduction,
         TRANSITIONS: {
                 ("check_accounts","check_banks"): loc_cnd.check_banks,
-                ("get_shares","shares_overview"): cnd.regexp(r"share", re.IGNORECASE),
+                ("get_ticker","overview_ticker"): cnd.regexp(r"share", re.IGNORECASE),
                 lbl.repeat():cnd.true() # If nothing matches go loop until something matches, additionally a special loop message will be displayed
             },
         },
@@ -110,18 +110,27 @@ plot = {
             }
         },
     },
-    "get_shares":{
-        "shares_overview":{
-        RESPONSE:loc_rsp.share_info,
+    "get_ticker":{
+        "overview_ticker":{
+        RESPONSE:loc_rsp.overview_ticker,
         TRANSITIONS: {
                 lbl.forward(): cnd.true(), # If no match, repeast
             }
         },
-        "get_ticker":{
-        RESPONSE:loc_rsp.get_ticker,
+        "plot_ticker":{
+        RESPONSE:loc_rsp.plot_ticker,
         TRANSITIONS: {
                 ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
-                ("get_shares", "shares_overview"): cnd.regexp(r"back", re.IGNORECASE),
+                ("get_ticker", "overview_ticker"): cnd.regexp(r"back", re.IGNORECASE),
+                ("get_ticker", "QA_ticker"): cnd.regexp(r"QA", re.IGNORECASE),                
+                lbl.backward(): cnd.true(), # If no match go back to overview
+            }
+        },
+        "QA_ticker":{
+        RESPONSE:loc_rsp.QA_ticker,
+        TRANSITIONS: {
+                ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
+                ("get_ticker", "overview_ticker"): cnd.regexp(r"back", re.IGNORECASE),
                 lbl.repeat(): cnd.true(), # If no match, repeast
             }
         }
