@@ -2,12 +2,17 @@ import json
 import re
 import plotly.express as px
 import yfinance as yf
+import wikipediaapi
 
 from df_engine.core import Actor, Context
 from .condition_util import clean_request
+from scenario.transformers import qa
+
+# General instance
+wiki = wikipediaapi.Wikipedia('en')
 
 
-def shares_info(ctx:Context):
+def overview_ticker(ctx:Context):
     my_response ="""I am your stock scatter plot assistant; please type any public traded stock with the corresponding "ticket symbol".
 To start with, here are some exemplatory corporations with corresponding ticker symbol:
 ----------------------------------------------------
@@ -30,13 +35,30 @@ INTC	      | Intel Corporation
     return my_response
 
 
-def get_ticker(ctx:Context):
+def plot_ticker(ctx:Context):
     request = ctx.last_request
     try:
-        msft = yf.Ticker(request)
-        df = msft.history(period="max")
-        fig = px.line(df, x=df.index, y="Close")
+        ticker = yf.Ticker(request)
+        ctx.misc["ticker_name"] = ticker.info["longName"]
+        df = ticker.history(period="max")
+        fig = px.line(df, x=df.index, y="Close", )
         fig.show() # Opens a separate Browser window
-        return "\nSuccess, see scatter plot in separate browser window."
+        return """
+Success, see scatter plot in separate browser window.
+If you like you can ask the bot in a free QA about the chosen company (Distillbert & Wikipedia)
+"""
     except:
         return "Failed, please type a valid ticker symbol."
+
+
+def QA_ticker(ctx:Context):
+
+    try:
+        question = ctx.last_request
+        ticker_name = ctx.misc.get("ticker_name")
+        page = wiki.page(ticker_name)
+        context = page.summary
+        result = qa(question,context)
+        return result["answer"]
+    except:
+        return f"Wiki article for {ticker_name} not found. Please tr< another ticker."
