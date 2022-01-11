@@ -17,6 +17,7 @@ plot = {
         TRANSITIONS: {
                 ("check_accounts","check_banks"): loc_cnd.check_banks,
                 ("get_ticker","overview_ticker"): cnd.regexp(r"share", re.IGNORECASE),
+                ("ask_the_bot_creator","QA_start_ask_the_bot_creator"): cnd.regexp(r"bot", re.IGNORECASE),
                 lbl.forward():cnd.true() # Automatic forward to first step
             },
         },
@@ -25,6 +26,7 @@ plot = {
         TRANSITIONS: {
                 ("check_accounts","check_banks"): loc_cnd.check_banks,
                 ("get_ticker","overview_ticker"): cnd.regexp(r"share", re.IGNORECASE),
+                ("ask_the_bot_creator","QA_start_ask_the_bot_creator"): cnd.regexp(r"bot", re.IGNORECASE),
                 lbl.repeat():cnd.true() # If nothing matches go loop until something matches, additionally a special loop message will be displayed
             },
         },
@@ -134,20 +136,22 @@ plot = {
                 lbl.repeat(): cnd.true(), # If no match, repeast
             }
         }
-
-
-
     },
-    "chat_financial_topics":{
-
-
-    },
-
-    "chat_creator_flow":{
-
-
+    "ask_the_bot_creator":{
+        "QA_start_ask_the_bot_creator":{
+        RESPONSE:loc_rsp.QA_start_ask_the_bot_creator,
+        TRANSITIONS: {
+                lbl.forward(): cnd.true(), # Forward with first Question; transitional step
+            }
+        },
+        "QA_ask_the_bot_creator":{
+        RESPONSE:loc_rsp.QA_ask_the_bot_creator,
+        TRANSITIONS: {
+                ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),    
+                lbl.repeat(): cnd.true(), # If no match go back to overview
+            }
+        }
     }
-
 }
 
 actor = Actor(plot, start_label=("global", "start"), fallback_label=("global", "fallback"))
