@@ -21,13 +21,23 @@ translator = deepl.Translator(os.getenv("DEEPL_AUTH_KEY"))
 def clean_response(ctx: Context, response: str,loopchecker=True)-> Any:
     language = ctx.misc.get("language")
 
-    response_clean = loop_checker(ctx,loopchecker=loopchecker)
-    response_clean += response
+    clean_response = loop_checker(ctx,loopchecker=loopchecker)
+    clean_response += response
 
     if language =="DE":
-        return str(translator.translate_text(response_clean, target_lang="DE"))
+        return str(translator.translate_text(clean_response, target_lang="DE"))
     elif language =="EN":
-        return response_clean
+        return clean_response
+
+def clean_request(ctx: Context)-> str:
+    language = ctx.misc.get("language")
+
+    request = ctx.last_request
+
+    if language =="DE":
+        return str(translator.translate_text(request, target_lang="EN-US"))
+    elif language =="EN":
+        return request
 
 
 # 1. ----------GLOBAL FLOW----------
@@ -127,10 +137,10 @@ def withdraw_money_confirm(ctx: Context, actor: Actor) -> Any:
 
 # 3.1
 def overview_ticker(ctx: Context, actor: Actor) -> Any:
-    
+
     response = helper_funcs_ticker.overview_ticker(ctx)
 
-    return clean_response(ctx, response)
+    return clean_response(ctx, response,loopchecker=False)
 
 # 3.2
 def plot_ticker(ctx: Context, actor: Actor) -> Any:
@@ -142,7 +152,7 @@ def plot_ticker(ctx: Context, actor: Actor) -> Any:
 # 3.3
 def QA_ticker(ctx: Context, actor: Actor) -> Any:
     
-    response = helper_funcs_ticker.QA_ticker(ctx)
+    response = helper_funcs_ticker.QA_ticker(ctx,clean_request(ctx))
 
     return clean_response(ctx, response,loopchecker=False)
 
@@ -158,6 +168,6 @@ def QA_start_ask_the_bot_creator(ctx: Context, actor: Actor) -> Any:
 # 4.2
 def QA_ask_the_bot_creator(ctx: Context, actor: Actor) -> Any:
     
-    response = helper_funcs_ask_the_bot_creator.QA_ask_the_bot_creator(ctx)
+    response = helper_funcs_ask_the_bot_creator.QA_ask_the_bot_creator(ctx,clean_request(ctx))
 
     return clean_response(ctx, response,loopchecker=False)

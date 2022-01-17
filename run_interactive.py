@@ -2,17 +2,22 @@
 
 import time
 from typing import Optional, Union
+import warnings
 
 from scenario.main import actor
 from df_engine.core import Actor, Context
 from annotators.main import annotate
+import warnings
+
+#Added by DS 17.01.2022
+warnings.filterwarnings("ignore") #To prevent depreciation warnings in prod mode
 
 
 def turn_handler(
     in_request: str,
     ctx: Union[Context, str, dict],
     actor: Actor,
-    true_out_response: Optional[str] = None,
+    true_out_response: Optional[str] = None
 ):
     # Context.cast - gets an object type of [Context, str, dict] returns an object type of Context
     ctx = Context.cast(ctx)
