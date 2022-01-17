@@ -6,15 +6,15 @@ from scenario.about_me import about_me
 
 def QA_start_ask_the_bot_creator(ctx:Context):
     response ="""
-    Please ask me anything about me. Hopefully I can answer. Thank you.
+    Please ask anything about me. Hopefully I can answer. Thank you.
     """
     return response
 
-def QA_ask_the_bot_creator(ctx:Context):
+def QA_ask_the_bot_creator(ctx:Context,question):
 
     try:
-        question = ctx.last_request
         result = qa(question,about_me)
-        return result["answer"]
+        return "\n"+result["answer"]
     except:
-        return "Something went wrong, please try another question."
+        return """
+Something went wrong, please try another question."""

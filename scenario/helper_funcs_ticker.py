@@ -48,17 +48,18 @@ Success, see scatter plot in separate browser window.
 If you like you can ask the bot in a free QA about the chosen company (Distillbert & Wikipedia)
 """
     except:
-        return "Failed, please type a valid ticker symbol."
+        return """
+Failed, please type a valid ticker symbol."""
 
 
-def QA_ticker(ctx:Context):
+def QA_ticker(ctx:Context,question):
 
     try:
-        question = ctx.last_request
         ticker_name = ctx.misc.get("ticker_name")
         page = wiki.page(ticker_name)
         context = page.summary
         result = qa(question,context)
-        return result["answer"]
+        return "\n"+result["answer"]
     except:
-        return f"Wiki article for {ticker_name} not found. Please tr< another ticker."
+        return f"""
+Wiki article for {ticker_name} not found. Please try another ticker."""

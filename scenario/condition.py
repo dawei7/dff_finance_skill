@@ -15,7 +15,15 @@ logger = logging.getLogger(__name__)
 
 
 # 0. ----------GENERAL----------
+def check_language(ctx: Context, actor: Actor) -> bool:
+    request = ctx.last_request.lower()
 
+    if re.search(r"\b(german)\b|\b(deutsch)\b|\b(de)\b", request) and ctx.misc["language"] != "DE":
+        return True
+    elif re.search(r"\b(english)\b|\b(englisch)\b|\b(en)\b", request) and ctx.misc["language"] != "EN":
+        return True
+    else:
+        return False
 
 
 # 1. ----------GLOBAL FLOW----------
