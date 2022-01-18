@@ -24,7 +24,7 @@ plot = {
         "bot_introduction":{
         RESPONSE:loc_rsp.bot_introduction,
         TRANSITIONS: {
-                lbl.repeat: loc_cnd.check_language,
+                lbl.repeat(): loc_cnd.check_language,
                 ("check_accounts","check_banks"): loc_cnd.check_banks,
                 ("get_ticker","overview_ticker"): cnd.regexp(r"share", re.IGNORECASE),
                 ("ask_the_bot_creator","QA_start_ask_the_bot_creator"): cnd.regexp(r"bot", re.IGNORECASE),
@@ -35,7 +35,7 @@ plot = {
             RESPONSE: "Ooops - something went wrong, either you type 'start' to go back to start node or \n\
             you press 'pevious' to go back to the previous point.' Anyway, I am very sorry.",
             TRANSITIONS: {
-                lbl.repeat: loc_cnd.check_language,
+                lbl.repeat(): loc_cnd.check_language,
                 ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
                 lbl.previous(): cnd.regexp(r"previous", re.IGNORECASE),
                 lbl.repeat(): cnd.true(), # If no match, repeast
@@ -46,7 +46,7 @@ plot = {
         "check_banks":{
             RESPONSE:loc_rsp.check_banks,
             TRANSITIONS:{
-                lbl.repeat: loc_cnd.check_language,
+                lbl.repeat(): loc_cnd.check_language,
                 ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
                 ("check_accounts","check_balances"): loc_cnd.check_balances,
                 ("check_accounts","transfer_money"): loc_cnd.tranfer_money,
@@ -59,7 +59,7 @@ plot = {
         "check_balances":{
         RESPONSE:loc_rsp.check_balances,
         TRANSITIONS: {
-                lbl.repeat: loc_cnd.check_language,
+                lbl.repeat(): loc_cnd.check_language,
                 ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
                 ("check_accounts", "check_banks"): cnd.regexp(r"back", re.IGNORECASE),
                 ("check_accounts","check_balances"): loc_cnd.check_balances,
@@ -73,7 +73,7 @@ plot = {
         "transfer_money":{
         RESPONSE:loc_rsp.transfer_money,
         TRANSITIONS: {
-                lbl.repeat: loc_cnd.check_language,
+                lbl.repeat(): loc_cnd.check_language,
                 ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
                 ("check_accounts", "check_banks"): cnd.regexp(r"back", re.IGNORECASE),
                 ("check_accounts","transfer_money_confirm"): cnd.true(), # In any case forward to get confirmation or rejection message
@@ -82,7 +82,7 @@ plot = {
         "transfer_money_confirm":{
         RESPONSE:loc_rsp.transfer_money_confirm,
         TRANSITIONS: {
-                lbl.repeat: loc_cnd.check_language,
+                lbl.repeat(): loc_cnd.check_language,
                 ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
                 ("check_accounts", "check_banks"): cnd.true() # In any case go back to start of check accounts
             }
@@ -90,7 +90,7 @@ plot = {
         "deposit_money":{
         RESPONSE:loc_rsp.deposit_money,
         TRANSITIONS: {
-                lbl.repeat: loc_cnd.check_language,
+                lbl.repeat(): loc_cnd.check_language,
                 ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
                 ("check_accounts", "check_banks"): cnd.regexp(r"back", re.IGNORECASE),
                 ("check_accounts", "deposit_money_confirm"): cnd.true(), # In any case forward to get confirmation or rejection message
@@ -99,7 +99,7 @@ plot = {
         "deposit_money_confirm":{
         RESPONSE:loc_rsp.deposit_money_confirm,
         TRANSITIONS: {
-                lbl.repeat: loc_cnd.check_language,
+                lbl.repeat(): loc_cnd.check_language,
                 ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
                 ("check_accounts", "check_banks"): cnd.true() # In any case go back to start of check accounts
             }
@@ -107,18 +107,18 @@ plot = {
         "withdraw_money":{
         RESPONSE:loc_rsp.withdraw_money,
         TRANSITIONS: {
-                lbl.repeat: loc_cnd.check_language,
+                lbl.repeat(): loc_cnd.check_language,
                 ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
                 ("check_accounts", "check_banks"): cnd.regexp(r"back", re.IGNORECASE),
-                ("check_accounts", "withdraw_money_confirm"): cnd.true(), # In any case forward to get confirmation or rejection message
+                ("check_accounts", "withdraw_money_confirm"): cnd.true() # In any case forward to get confirmation or rejection message
             }
         },
         "withdraw_money_confirm":{
         RESPONSE:loc_rsp.withdraw_money_confirm,
         TRANSITIONS: {
-                lbl.repeat: loc_cnd.check_language,
+                lbl.repeat(): loc_cnd.check_language,
                 ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
-                ("check_accounts", "check_banks"): cnd.true(), # In any case forward to get confirmation or rejection message
+                ("check_accounts", "check_banks"): cnd.true() # In any case forward to get confirmation or rejection message
             }
         },
     },
@@ -126,27 +126,27 @@ plot = {
         "overview_ticker":{
         RESPONSE:loc_rsp.overview_ticker,
         TRANSITIONS: {
-                lbl.repeat: loc_cnd.check_language,
-                lbl.forward(): cnd.true(), # If no match, repeast
+                lbl.repeat(): loc_cnd.check_language,
+                ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
+                lbl.forward(): cnd.true() # If no match, repeast
             }
         },
         "plot_ticker":{
         RESPONSE:loc_rsp.plot_ticker,
         TRANSITIONS: {
-                lbl.repeat: loc_cnd.check_language,
+                lbl.repeat(): loc_cnd.check_language,
                 ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
-                ("get_ticker", "overview_ticker"): cnd.regexp(r"back", re.IGNORECASE),
-                ("get_ticker", "QA_ticker"): cnd.regexp(r"QA", re.IGNORECASE),                
-                lbl.backward(): cnd.true(), # If no match go back to overview
+                ("get_ticker", "overview_ticker"): cnd.regexp(r"back", re.IGNORECASE),          
+                lbl.forward(): cnd.true() # FFrom Plot Ticker, you have the possibility to ask follow questions to the bot
             }
         },
         "QA_ticker":{
         RESPONSE:loc_rsp.QA_ticker,
         TRANSITIONS: {
-                lbl.repeat: loc_cnd.check_language,
+                lbl.repeat(): loc_cnd.check_language,
                 ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
                 ("get_ticker", "overview_ticker"): cnd.regexp(r"back", re.IGNORECASE),
-                lbl.repeat(): cnd.true(), # If no match, repeast
+                lbl.repeat(): cnd.true() # If no match, repeat
             }
         }
     },
@@ -154,16 +154,18 @@ plot = {
         "QA_start_ask_the_bot_creator":{
         RESPONSE:loc_rsp.QA_start_ask_the_bot_creator,
         TRANSITIONS: {
-                lbl.repeat: loc_cnd.check_language,
-                lbl.forward(): cnd.true(), # Forward with first Question; transitional step
+                lbl.repeat(): loc_cnd.check_language,
+                ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),
+                lbl.forward(): cnd.true() # Forward with first Question; transitional step
             }
         },
         "QA_ask_the_bot_creator":{
         RESPONSE:loc_rsp.QA_ask_the_bot_creator,
         TRANSITIONS: {
-                lbl.repeat: loc_cnd.check_language,
-                ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE),    
-                lbl.repeat(): cnd.true(), # If no match go back to overview
+                lbl.repeat(): loc_cnd.check_language,
+                ("global", "bot_introduction"): cnd.regexp(r"start", re.IGNORECASE), 
+                ("ask_the_bot_creator", "QA_start_ask_the_bot_creator"): cnd.regexp(r"back", re.IGNORECASE),   
+                lbl.repeat(): cnd.true() # If no match go back to overview
             }
         }
     }
