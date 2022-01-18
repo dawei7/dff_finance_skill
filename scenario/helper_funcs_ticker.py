@@ -13,7 +13,8 @@ wiki = wikipediaapi.Wikipedia('en')
 
 
 def overview_ticker(ctx:Context):
-    my_response ="""I am your stock scatter plot assistant; please type any public traded stock with the corresponding "ticket symbol".
+    my_response ="""
+I am your stock scatter plot assistant; please type any public traded stock with the corresponding "ticket symbol".
 To start with, here are some exemplatory corporations with corresponding ticker symbol:
 ----------------------------------------------------
 Ticker Symbol | Corporation
@@ -41,11 +42,11 @@ def plot_ticker(ctx:Context):
         ticker = yf.Ticker(request)
         ctx.misc["ticker_name"] = ticker.info["longName"]
         df = ticker.history(period="max")
-        fig = px.line(df, x=df.index, y="Close", )
+        fig = px.line(df, x=df.index, y="Close", title=ctx.misc["ticker_name"])
         fig.show() # Opens a separate Browser window
         return """
 Success, see scatter plot in separate browser window.
-If you like you can ask the bot in a free QA about the chosen company (Distillbert & Wikipedia)
+If you like you can ask the bot in a free QA about the chosen company (Distilbert & Wikipedia)
 """
     except:
         return """
@@ -53,6 +54,10 @@ Failed, please type a valid ticker symbol."""
 
 
 def QA_ticker(ctx:Context,question):
+
+    # Prevent sending language key words to QA model
+    if not ctx.validation and not ctx.misc["language_not_changed"]:
+        return "\nGreat, you changed the language, go on. I'm ready."
 
     try:
         ticker_name = ctx.misc.get("ticker_name")

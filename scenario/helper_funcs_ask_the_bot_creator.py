@@ -12,6 +12,10 @@ def QA_start_ask_the_bot_creator(ctx:Context):
 
 def QA_ask_the_bot_creator(ctx:Context,question):
 
+    # Prevent sending language key words to QA model
+    if not ctx.validation and not ctx.misc["language_not_changed"]:
+        return "Great, you changed the language, go on. I'm ready."
+
     try:
         result = qa(question,about_me)
         return "\n"+result["answer"]
