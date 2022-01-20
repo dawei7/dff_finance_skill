@@ -3,6 +3,8 @@
 import time
 from typing import Optional, Union
 import warnings
+import os
+
 
 from scenario.main import actor
 from df_engine.core import Actor, Context
