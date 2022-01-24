@@ -1,7 +1,7 @@
 {
     "UBS":{
         "Amount":10000,
-        "Interest":0.02
+        "interest":0.02
     },
     "Credit Suisse":
     {

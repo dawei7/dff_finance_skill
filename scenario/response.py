@@ -35,7 +35,7 @@ def clean_request(ctx: Context)-> str:
     request = ctx.last_request
 
     if language =="DE":
-        return str(translator.translate_text(request, target_lang="EN-US"))
+        return str(translator.translate(request, dest="de",src="en"))
     elif language =="EN":
         return request
 
@@ -51,11 +51,11 @@ type the keyword 'german' or 'english' to switch the language.
 You can go back to this bot introduction anywhere in the chat workflow by typing 'start'.
 
 I have the following financial skills:
-    1. Check your balance, transfer money, deposit/withdraw money (REGEX/ Local save)
-    2. Plot share tickers & QA of the company (yfinance API/ Plotly/ HuggingFace)
+    1. Check your balance, transfer money, deposit/withdraw money (REGEX/ Local save) | Keyword: check
+    2. Plot share tickers & QA of the company (yfinance API/ Plotly/ HuggingFace) | Keyword: share
 
 Other skill:
-    3. If you like to get more information about me, query me (HuggingFace)
+    3. If you like to get more information about the bot creator, query me (HuggingFace) | Keyword: bot
 --------------------------------------------------------------------------------------------
 """
     return clean_response(ctx, response)

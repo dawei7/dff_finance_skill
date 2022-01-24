@@ -1,6 +1,13 @@
-# dff-TEMPLATE-skill
-
 ## Description
+
+The chat bot is bi-lingual, English and German. It translates with Deepl, which is built up itself by deep learning technology. However theere is a curse in itself, the translation,
+sometimes randomly choose variation of words and is therefore not deterministic (For testing purposes this is problematic).
+The financial skill consists of 3 branches.
+
+1. Simulation of a simple ATM machine with mock files, show, transfer, wtihdraw & deposit money. The script works with Regex and takes information from JSON-Mock-File.
+2. The highlight is in Branch 2, where I let the user select any share ticker from Yahoo Finance. Yahoo Finance then returns a pandas dataframe with the historical share prices, which I display in Plotly. Through targeted data scraping, I search for the best matching Wikipedia article from the same ticker and have a summary loaded into the distilbert QA (from HuggingFace) model as context, so that it dynamically always reloads and the user has an almost unlimited amount of choice of companies and questions.
+3. The last branch works with the same distilbert QA (from HuggingFace), but from static context about me as a person and creator of this bot.
+
 
 **dff_finance_skill** 
 ## Quickstart
@@ -14,7 +21,12 @@ python run_interactive.py
 ```
 Run tests
 ```bash
-python run_test.py
+Not working automatically:
+python run_test.py (Don't use)
+Reasons:
+- Deepl translation is consistent
+- Console-Output in run_test is not consistent with manual output
+- Test script can be checked manually. Test-Script written in run_test.py for manual retesting.
 ```
 ## External APIs
 ### DEEPL API (Authentication key required)

@@ -7,8 +7,6 @@ from df_engine.core import Actor, Context
 
 from .condition_util import clean_request
 
-import annotators.main as ctx_setter
-
 
 logger = logging.getLogger(__name__)
 
@@ -36,18 +34,19 @@ def check_banks(ctx: Context, actor: Actor) -> bool:
 # 2.2
 def check_balances(ctx: Context, actor: Actor) -> bool:
     
-    # Just checking, in response it has to be rechecked
+    # Preprocess request
     request = clean_request(ctx,lower=False)
     
-    #check and at least one bank
+    # Check if at least one bank has been found
     return re.search(r"\b(show)\b",request) != None and re.search(r"\b(all)\b|\b(All)\b|\b(UBS)\b|\b(Credit Suisse)\b|\b(Raiffeisen)\b|\b(Zuercher Kantonalbank)\b|\b(Postfinance)\b", request) != None
 
 # 2.3
 def tranfer_money(ctx: Context, actor: Actor) -> bool:
 
+    # Preprocess request
     request = clean_request(ctx,no_translation=True,lower=False)
     
-    #check and at least one bank
+    # Check if show and at least one bank has been found
     if re.search(r"\b(transfer)\b",request) != None and re.search(r"[1-9]\d*",request) != None:
         banks = ["".join(x) for x in re.findall(r"\b(UBS)\b|\b(Credit Suisse)\b|\b(Raiffeisen)\b|\b(Zuercher Kantonalbank)\b|\b(Postfinance)\b", request)]
         if len(banks) == 2:
@@ -59,9 +58,10 @@ def tranfer_money(ctx: Context, actor: Actor) -> bool:
 # 2.4
 def deposit_money(ctx: Context, actor: Actor) -> Any:
     
+    # Preprocess request
     request = clean_request(ctx,no_translation=True,lower=False)
     
-    #check and at least one bank
+    # Check if deposit and at least one bank has been found
     if re.search(r"\b(deposit)\b",request) != None and re.search(r"[1-9]\d*",request) != None:
         banks = ["".join(x) for x in re.findall(r"\b(UBS)\b|\b(Credit Suisse)\b|\b(Raiffeisen)\b|\b(Zuercher Kantonalbank)\b|\b(Postfinance)\b", request)]
         if len(banks) == 1:
@@ -74,7 +74,7 @@ def deposit_money(ctx: Context, actor: Actor) -> Any:
 def withdraw_money(ctx: Context, actor: Actor) -> Any:
     request = clean_request(ctx,no_translation=True,lower=False)
     
-    #check and at least one bank
+    # Check if withdraw and at least one bank has been found
     if re.search(r"\b(withdraw)\b",request) != None and re.search(r"[1-9]\d*",request) != None:
         banks = ["".join(x) for x in re.findall(r"\b(UBS)\b|\b(Credit Suisse)\b|\b(Raiffeisen)\b|\b(Zuercher Kantonalbank)\b|\b(Postfinance)\b", request)]
         if len(banks) == 1:

@@ -1,12 +1,14 @@
 import json
 import re
-from df_engine.core import Actor, Context
+from df_engine.core import Context
 from .condition_util import clean_request
 
+# Static item from mock file
 f = open("mock_assets/banks_account_balances.json")
 banks = json.load(f,encoding='utf-8')
 f.close()
 
+# Start
 def check_available_banks():
     my_banks = "\n"
     for bank in banks.keys():
@@ -14,6 +16,7 @@ def check_available_banks():
 
     return my_banks
 
+# Return all bank accounts, which have been requested, dynamic return according to selection from user, one, many or all
 def check_balances(ctx:Context):
     my_banks = ["".join(x) for x in re.findall(r"\b(all)\b|\b(All)\b|\b(UBS)\b|\b(Credit Suisse)\b|\b(Raiffeisen)\b|\b(Zuercher Kantonalbank)\b|\b(Postfinance)\b", clean_request(ctx, no_translation=True, lower=False))]
 
@@ -33,6 +36,7 @@ def check_balances(ctx:Context):
 
     return my_response
 
+# Function transfer money deduct from one bank account to another
 def tranfer_money(ctx:Context):
 
     my_banks = ["".join(x) for x in re.findall(r"\b(UBS)\b|\b(Credit Suisse)\b|\b(Raiffeisen)\b|\b(Zuercher Kantonalbank)\b|\b(Postfinance)\b", clean_request(ctx, no_translation=True, lower=False))]
@@ -55,6 +59,7 @@ def tranfer_money(ctx:Context):
 
     return my_response
 
+# Confirm transfer money (yes, no) - Because transfer money is sensitive, it has to be confirmed
 def transfer_money_confirm(ctx:Context):
 
     if re.search(r"\b(yes)\b",clean_request(ctx)) != None:
@@ -77,7 +82,7 @@ def transfer_money_confirm(ctx:Context):
                     my_response += f"{bank}:\n"
                     for k, v in banks[bank].items():
                         my_response += f"{k}: {v:,}\n"
-                    my_response += "\n Press any key to go back to the bank overview or press 'start to go back to the start'"
+                my_response += "\nPress any key to go back to the bank overview or press 'start to go back to the start'"
 
             else:
                 my_response+= "\nVery sorry! The amount of the withdraw bank is too low. Please choose another amount"
@@ -88,12 +93,12 @@ def transfer_money_confirm(ctx:Context):
             my_response ="\nSomething went wrong."
 
     else:
-        my_response = "\n Alright. You didn't confirm."
-        my_response += "\n Press any key to go back to the bank overview or press 'start to go back to the start'"
+        my_response = "\nAlright. You didn't confirm."
+        my_response += "\nPress any key to go back to the bank overview or press 'start to go back to the start'"
 
     return my_response
 
-
+# Deposit money, like from an ATM
 def deposit_money(ctx:Context):
 
     my_banks = ["".join(x) for x in re.findall(r"\b(UBS)\b|\b(Credit Suisse)\b|\b(Raiffeisen)\b|\b(Zuercher Kantonalbank)\b|\b(Postfinance)\b", clean_request(ctx, no_translation=True, lower=False))]
@@ -117,7 +122,7 @@ def deposit_money(ctx:Context):
 
     return my_response
 
-
+# Sensitive, therefore confirm
 def deposit_money_confirm(ctx:Context):
 
     if re.search(r"\b(yes)\b",clean_request(ctx)) != None:
@@ -148,7 +153,7 @@ def deposit_money_confirm(ctx:Context):
     return my_response
 
 
-
+# Withdraw money, like from an ATM, but cannot go beyond zero
 def withdraw_money(ctx:Context):
 
     my_banks = ["".join(x) for x in re.findall(r"\b(UBS)\b|\b(Credit Suisse)\b|\b(Raiffeisen)\b|\b(Zuercher Kantonalbank)\b|\b(Postfinance)\b", clean_request(ctx, no_translation=True, lower=False))]
@@ -172,6 +177,7 @@ def withdraw_money(ctx:Context):
 
     return my_response
 
+# Sensitive, therefore confirm
 def withdraw_money_confirm(ctx:Context):
 
     if re.search(r"\b(yes)\b",clean_request(ctx)) != None:
