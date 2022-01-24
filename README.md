@@ -22,7 +22,7 @@ python run_interactive.py
 Run tests
 ```bash
 # Not working automatically:
-python run_test.py (Don't use)
+python run_test.py # (Don't use)
 # Reasons:
 # - Deepl translation is consistent
 # - Console-Output in run_test is not consistent with manual output
