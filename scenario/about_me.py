@@ -5,7 +5,7 @@
 about_me = """
 My name is David Schmid. I was born on 12.11.1986. I'm Swiss. I am the creator of this bot. It has been created in context of the course 'ML Project' of HSE University.
 I'm married and have 2 children, a boy and a girl. I'm working as a Business Intelligence Specialist. At the same time, I study 'Data Science' remotely at the HSE university. This project shows the power of NLP
-with a pretrained model called Distillbert. The name distilbert is deducted from Bert, as a child model; it is a condensed, smaller and therefore distilled model, which shows similar performance but is
+with a pretrained model called Distilbert. The name distilbert is deducted from Bert, as a child model; it is a condensed, smaller and therefore distilled model, which shows similar performance but is
 a lot smaller. It is fascinating how an NLP model can interpret human words. Words have to be converted into numbers and these patterns have to be interpreted into
 context in a Recurrent Neural Network (RNN), with Long Short-Term Memory (LSTM) and backpropagation. These deep learning models belong to the state-of-the-art models with
 all its complexity. At the same time, it shows us, how great  human intelligence, compared to artificial intelligence is. Some tasks are easily replaced by the

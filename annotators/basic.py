@@ -2,7 +2,7 @@ import re
 
 from df_engine.core import Context
 
-
+# Has language been changed?
 def check_language(ctx: Context):
     request = ctx.last_request.lower()
 
@@ -21,7 +21,7 @@ def check_language(ctx: Context):
     return ctx
 
 def previous_label(ctx:Context):
-
+# Is there a loop?
     if ctx.last_label==None or ctx.last_label==("global","start"):
         ctx.misc["previous_label"] = ("global","bot_introduction") # Special case for first & second run
     else:

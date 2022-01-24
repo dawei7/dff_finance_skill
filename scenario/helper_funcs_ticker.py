@@ -10,10 +10,10 @@ from df_engine.core import Actor, Context
 from .condition_util import clean_request
 from scenario.transformers import qa
 
-# General instance
+# Generate wiki object
 wiki = wikipediaapi.Wikipedia('en')
 
-
+# List some exemplary shares, so that the user has some choice, the user can choose any other ticket, not listed inside
 def overview_ticker(ctx:Context):
     my_response ="""
 I am your stock scatter plot assistant; please type any public traded stock with the corresponding "ticker symbol".
@@ -37,7 +37,7 @@ INTC	      | Intel Corporation
 """
     return my_response
 
-
+# When chosen a ticker, it requests historical data from yFinance, gets it back by wrapper as pandas dataframe and plots it in a separate brwoser window.
 def plot_ticker(ctx:Context):
     request = ctx.last_request
     try:
@@ -55,7 +55,7 @@ If you like you can ask the bot in a free QA about the chosen company (Distilber
         return """
 Failed, please type a valid ticker symbol."""
 
-
+# Get the context of chosen ticker as wiki summary, the user therefore has unlimited choice of any company through dynamic reloading
 def QA_ticker(ctx:Context,question):
 
     # Prevent sending language key words to QA model
