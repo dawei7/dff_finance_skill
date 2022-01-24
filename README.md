@@ -23,7 +23,7 @@ Run tests
 ```bash
 # Not working automatically:
 python run_test.py # (Don't use)
-Reasons:
+# Reasons:
 # - Deepl translation is consistent
 # - Console-Output in run_test is not consistent with manual output
 # - Test script can be checked manually. Test-Script written in run_test.py for manual retesting.
