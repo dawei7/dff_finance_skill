@@ -35,7 +35,7 @@ def clean_request(ctx: Context)-> str:
     request = ctx.last_request
 
     if language =="DE":
-        return str(translator.translate(request, dest="de",src="en"))
+        return str(translator.translate_text(request, target_lang="DE"))
     elif language =="EN":
         return request
 

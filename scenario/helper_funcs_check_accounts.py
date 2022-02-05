@@ -1,6 +1,6 @@
 import json
 import re
-from df_engine.core import Context
+from df_engine.core import Actor, Context
 from .condition_util import clean_request
 
 # Static item from mock file
