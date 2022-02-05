@@ -45,6 +45,7 @@ def tranfer_money(ctx: Context, actor: Actor) -> bool:
 
     # Preprocess request
     request = clean_request(ctx,no_translation=True,lower=False)
+
     
     # Check if show and at least one bank has been found
     if re.search(r"\b(transfer)\b",request) != None and re.search(r"[1-9]\d*",request) != None:
@@ -60,6 +61,8 @@ def deposit_money(ctx: Context, actor: Actor) -> Any:
     
     # Preprocess request
     request = clean_request(ctx,no_translation=True,lower=False)
+
+    answer = False
     
     # Check if deposit and at least one bank has been found
     if re.search(r"\b(deposit)\b",request) != None and re.search(r"[1-9]\d*",request) != None:
@@ -70,9 +73,12 @@ def deposit_money(ctx: Context, actor: Actor) -> Any:
     return False
 
 
+
 #2.5
 def withdraw_money(ctx: Context, actor: Actor) -> Any:
     request = clean_request(ctx,no_translation=True,lower=False)
+
+    answer = False
     
     # Check if withdraw and at least one bank has been found
     if re.search(r"\b(withdraw)\b",request) != None and re.search(r"[1-9]\d*",request) != None:
